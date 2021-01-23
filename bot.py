@@ -1,6 +1,7 @@
 import os
 import random
 import discord
+import aiocron
 from dotenv import load_dotenv
 from dao.piada import PiadaDao
 from dao.trello import TrelloDao
@@ -35,7 +36,6 @@ async def on_message(message):
         mensagem_help = '!piada - Te conto uma piada\n!trello - Cards do Trello\n'
         await message.channel.send( mensagem_help )
 
-
     if message.content == '!piada' or message.content == '-piada' or message.content == 'piada!':
         mensagem_piada = piada_dao.array_piada()
         response = random.choice( mensagem_piada )
@@ -46,5 +46,15 @@ async def on_message(message):
         lista_textos = discord_dao.dividir_str_para_mensagem( texto_str )
         for mensagem in lista_textos:
             await message.channel.send( mensagem )
+
+@aiocron.crontab('50 13 * * 3')
+async def cornjob1():
+    channel = client.get_channel(int(os.getenv('DISCORD_CHANNEL_ID')))
+    await channel.send("Reunião geral hoje as 14:00 !!!")
+
+@aiocron.crontab('50 16 * * 5')
+async def cornjob1():
+    channel = client.get_channel(int(os.getenv('DISCORD_CHANNEL_ID')))
+    await channel.send("Reunião suporte hoje as 17:00 !!!")
 
 client.run(TOKEN)
