@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class TrelloDao:
-    dashboard_id = ''
+    dashboard_id = os.getenv('TRELLO_DASHBOARD_ID')
     headers = {
         "Accept": "application/json"
     }
@@ -26,7 +26,7 @@ class TrelloDao:
     def get_cards_dashboard(self):
         lists = self.get_lists_dashboard()
         cards = self.get_cards_list(lists)
-        return self.formatar_discord(cards)
+        return self.formatar_em_texto(cards)
     
     def get_lists_dashboard(self):
         response = self.get('https://api.trello.com/1/boards/'+self.dashboard_id+'/lists')
@@ -55,12 +55,13 @@ class TrelloDao:
             })
         return listas_com_cards
 
-    def formatar_discord(self, cards_in_list):
-        texto_dircord = ''
+    def formatar_em_texto(self, cards_in_list):
+        texto_str = ''
         for lista in cards_in_list:
-            lista_com_cards_str = '** '+lista['list_name']+' **\n'
+            # nome da lista
+            lista_com_cards_str = '*'+lista['list_name']+'*\n'
+            # percorre todos os cards da lista
             for card in lista['cards_in_list']:
-                lista_com_cards_str += ( card['name'] + ' - ' + card['desc'] +'\n\n')
-            texto_dircord += lista_com_cards_str
-
-        return [texto_dircord[0:1999]]
+                lista_com_cards_str += ( card['name'] + ' -> ' + card['desc'] +'\n')
+            texto_str += ( lista_com_cards_str + '\n\n' )
+        return texto_str
