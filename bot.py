@@ -2,11 +2,16 @@ import os
 import random
 import discord
 from dotenv import load_dotenv
+from dao.piada import PiadaDao
+from dao.trello import TrelloDao
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 client = discord.Client()
+
+piada_dao = PiadaDao()
+trello_dao = TrelloDao()
 
 @client.event
 async def on_ready():
@@ -27,13 +32,22 @@ async def on_message(message):
     mensagem_help = [
         (
             '!piada eu te conto uma piada\n'
-            '!teste não faz nada\n'
-            '!sla não faz nada tbm'
+            '!trello cards do Trello\n'
         ),
     ]
 
     if message.content == '!help' or message.content == '-help' or message.content == 'help!':
-        response = random.choice(mensagem_help)
-        await message.channel.send(response)
+        response = random.choice( mensagem_help )
+        await message.channel.send( response )
+
+    mensagem_piada = piada_dao.array_piada()
+
+    if message.content == '!piada' or message.content == '-piada' or message.content == 'piada!':
+        response = random.choice( mensagem_piada )
+        await message.channel.send( response )
+
+    if message.content == '!trello' or message.content == '-trello' or message.content == 'trello!':
+        response = random.choice( trello_dao.get_cards_dashboard() )
+        await message.channel.send( response )
 
 client.run(TOKEN)

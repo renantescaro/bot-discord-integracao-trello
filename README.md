@@ -6,4 +6,4 @@
 * pip install -U discord.py
 
 ## Token
-* .env valor para DISCORD_TOKEN
+* adicionar tokens no arquivo .env
