@@ -36,9 +36,4 @@ async def on_message(message):
         response = random.choice(mensagem_help)
         await message.channel.send(response)
 
-    
-    if message.content == '!marina':
-        response = random.choice(['coisa mais linda'])
-        await message.channel.send(response)
-
 client.run(TOKEN)
