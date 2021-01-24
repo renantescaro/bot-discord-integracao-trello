@@ -7,8 +7,12 @@
 * https://canaltech.com.br/apps/como-criar-bots-para-responder-discord/
 
 ### Instalar dependência
+* Python 3.8
 * pip install -U discord.py
 * pip install aiocron
+* pip install python-dotenv
+* pip install requests
+* pip install cron-descriptor
 
 ### Token
 * adicionar tokens no arquivo .env

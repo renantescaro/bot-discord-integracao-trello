@@ -6,15 +6,16 @@ from dotenv import load_dotenv
 from dao.piada import PiadaDao
 from dao.trello import TrelloDao
 from dao.discord import DiscordDao
+from dao.reuniao import ReuniaoDao
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-client = discord.Client()
-
+client      = discord.Client()
 piada_dao   = PiadaDao()
 trello_dao  = TrelloDao()
 discord_dao = DiscordDao()
+reuniao_dao = ReuniaoDao()
 
 @client.event
 async def on_ready():
@@ -23,9 +24,7 @@ async def on_ready():
 @client.event
 async def on_member_join(member):
     await member.create_dm()
-    await member.dm_channel.send(
-        f'Olá {member.name}, bem vindo ao meu servidor no Discord!'
-    )
+    await member.dm_channel.send(f'Olá {member.name}, Bem Vindo!')
 
 @client.event
 async def on_message(message):
@@ -35,6 +34,10 @@ async def on_message(message):
     if message.content == '!help' or message.content == '-help' or message.content == 'help!':
         mensagem_help = '!piada - Te conto uma piada\n!trello - Cards do Trello\n'
         await message.channel.send( mensagem_help )
+
+    if message.content == '!call' or message.content == '-call' or message.content == 'call!':
+        mensagem_call = reuniao_dao.get_reunioes_texto()
+        await message.channel.send( mensagem_call )
 
     if message.content == '!piada' or message.content == '-piada' or message.content == 'piada!':
         mensagem_piada = piada_dao.array_piada()
@@ -47,14 +50,14 @@ async def on_message(message):
         for mensagem in lista_textos:
             await message.channel.send( mensagem )
 
-@aiocron.crontab('50 13 * * 3')
-async def cornjob1():
-    channel = client.get_channel(int(os.getenv('DISCORD_CHANNEL_ID')))
-    await channel.send("Reunião geral hoje as 14:00 !!!")
+@aiocron.crontab( str(os.getenv('REUNIAO_CRON_1')) )
+async def cron_job_1():
+    channel = client.get_channel( int(os.getenv('DISCORD_CHANNEL_ID')) )
+    await channel.send( reuniao_dao.get_horas_texto_1() )
 
-@aiocron.crontab('50 16 * * 5')
-async def cornjob1():
-    channel = client.get_channel(int(os.getenv('DISCORD_CHANNEL_ID')))
-    await channel.send("Reunião suporte hoje as 17:00 !!!")
+@aiocron.crontab( str(os.getenv('REUNIAO_CRON_2')) )
+async def cron_job_2():
+    channel = client.get_channel( int(os.getenv('DISCORD_CHANNEL_ID')) )
+    await channel.send( reuniao_dao.get_horas_texto_2() )
 
 client.run(TOKEN)
