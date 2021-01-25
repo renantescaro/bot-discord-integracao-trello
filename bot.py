@@ -32,7 +32,7 @@ async def on_message(message):
         return
 
     if message.content == '!help' or message.content == '-help' or message.content == 'help!':
-        mensagem_help = '!piada - Te conto uma piada\n!trello - Cards do Trello\n'
+        mensagem_help = '!piada - Te conto uma piada\n!trello - Cards do Trello\n!call - Reuniões semanais'
         await message.channel.send( mensagem_help )
 
     if message.content == '!call' or message.content == '-call' or message.content == 'call!':

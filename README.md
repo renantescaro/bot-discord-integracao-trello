@@ -1,7 +1,7 @@
 ### Bot para o Discord
 * Integração com Trello, mostra todos os cards de uma dashboard, comando !trello
 * Conta piada, comando !piada
-* Aviso de reuniões semanais ( via cron jobs )
+* Aviso de reuniões semanais ( via cron jobs e/ou comando !call)
 
 ### criar bot no Discord
 * https://canaltech.com.br/apps/como-criar-bots-para-responder-discord/
